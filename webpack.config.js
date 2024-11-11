@@ -1,69 +1,75 @@
-const path = require('path'); // Импортируем модуль "path" для работы с путями файлов
+const path = require("path"); // Импортируем модуль "path" для работы с путями файлов
 
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
+const HtmlWebpackPlugin = require("html-webpack-plugin");
 
 module.exports = {
+  entry: "./src/index.js", // Точка входа для сборки проекта
 
-   entry: './src/index.js', // Точка входа для сборки проекта
+  output: {
+    filename: "bundle.js", // Имя выходного файла сборки
 
+    path: path.resolve(__dirname, "dist"), // Путь для выходного файла сборки
+  },
 
-   output: {
+  module: {
+    rules: [
+      {
+        test: /\.css$/, // Регулярное выражение для обработки файлов с расширением .css
 
-       filename: 'bundle.js', // Имя выходного файла сборки
+        use: ["style-loader", "css-loader"], // Загрузчики, используемые для обработки CSS-файлов
+      },
+    ],
+  },
 
-       path: path.resolve(__dirname, 'dist'), // Путь для выходного файла сборки
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/index.html",
 
-   },
+      inject: true,
 
+      chunks: ["index"],
 
-   module: {
+      filename: "index.html",
+    }),
 
-       rules: [
+    new HtmlWebpackPlugin({
+      template: "./src/todo.html",
 
-           {
+      inject: true,
 
-               test: /\.css$/, // Регулярное выражение для обработки файлов с расширением .css
+      chunks: ["index"],
 
-               use: ['style-loader', 'css-loader'], // Загрузчики, используемые для обработки CSS-файлов
+      filename: "todo.html",
+    }),
 
-           },
+    new HtmlWebpackPlugin({
+      template: "./src/info.html",
 
-       ],
+      inject: true,
 
-   },
+      chunks: ["index"],
 
+      filename: "info.html",
+    }),
 
-   plugins: [
+    new HtmlWebpackPlugin({
+      template: "./src/projects.html",
 
-       new HtmlWebpackPlugin({
+      inject: true,
 
-           template: './src/index.html',
+      chunks: ["index"],
 
-           inject: true,
+      filename: "projects.html",
+    }),
+  ],
 
-           chunks: ['index'],
+  devServer: {
+    static: {
+      directory: path.join(__dirname, "dist"), // Каталог для статики
+    },
 
-           filename: 'index.html'
+    open: true, // Автоматически открывать браузер
+  },
 
-       }),
-
-   ],
-
-
-   devServer: {
-
-       static: {
-
-           directory: path.join(__dirname, 'dist'), // Каталог для статики
-
-       },
-
-       open: true, // Автоматически открывать браузер
-
-   },
-
-
-   mode: 'development', // Режим сборки
-
+  mode: "development", // Режим сборки
 };
